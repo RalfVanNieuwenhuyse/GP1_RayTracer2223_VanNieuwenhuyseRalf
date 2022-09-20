@@ -1,7 +1,7 @@
 #pragma once
 #include <cassert>
 #include "Math.h"
-//math
+
 namespace dae
 {
 	namespace BRDF
