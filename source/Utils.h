@@ -13,7 +13,35 @@ namespace dae
 		inline bool HitTest_Sphere(const Sphere& sphere, const Ray& ray, HitRecord& hitRecord, bool ignoreHitRecord = false)
 		{
 			//todo W1
-			assert(false && "No Implemented Yet!");
+
+			Vector3 rayOrToSphereOrVec{ sphere.origin-ray.origin};
+			Vector3 rayOrToSphereOrProjectVec{Vector3::Project(rayOrToSphereOrVec,ray.direction)};
+
+			float rayOrToProjectOr{Vector3::Dot(rayOrToSphereOrVec,ray.direction)};
+
+			float projectOrToSphereOr{sqrtf((rayOrToSphereOrVec.Magnitude() * rayOrToSphereOrVec.Magnitude()) 
+										- (rayOrToProjectOr * rayOrToProjectOr) )};
+
+			float hitpointOrToSphereOr{ sqrtf((sphere.radius * sphere.radius) - (projectOrToSphereOr * projectOrToSphereOr)) };
+
+			float rayOrToHit{ rayOrToProjectOr - hitpointOrToSphereOr };
+
+			Vector3 hitPoint{ray.origin + (ray.direction * rayOrToHit)};
+
+			if (rayOrToHit > ray.min && rayOrToHit < ray.max)
+			{
+				hitRecord.didHit = true;
+				hitRecord.materialIndex = sphere.materialIndex;
+				hitRecord.t = rayOrToHit;
+				hitRecord.origin = hitPoint;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+
+			//assert(false && "No Implemented Yet!");
 			return false;
 		}
 
@@ -28,7 +56,27 @@ namespace dae
 		inline bool HitTest_Plane(const Plane& plane, const Ray& ray, HitRecord& hitRecord, bool ignoreHitRecord = false)
 		{
 			//todo W1
-			assert(false && "No Implemented Yet!");
+			Vector3 planeNormalVec{plane.normal};
+
+			float planeOrToRayOr = Vector3::Dot((plane.origin - ray.origin), planeNormalVec) / Vector3::Dot(ray.direction, plane.normal);
+
+			Vector3 hitPoint{ ray.origin + ((Vector3::Dot((plane.origin - ray.origin), planeNormalVec)
+				/ Vector3::Dot(ray.direction, planeNormalVec))) * ray.direction };
+			
+			if (planeOrToRayOr > ray.min && planeOrToRayOr < ray.max)
+			{
+				hitRecord.didHit = true;
+				hitRecord.t = planeOrToRayOr;
+				hitRecord.materialIndex = plane.materialIndex;
+				hitRecord.origin = hitPoint;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+
+			//assert(false && "No Implemented Yet!");
 			return false;
 		}
 
