@@ -12,6 +12,8 @@
 #include "Renderer.h"
 #include "Scene.h"
 
+
+
 using namespace dae;
 
 void ShutDown(SDL_Window* pWindow)
@@ -33,7 +35,7 @@ int main(int argc, char* args[])
 	const uint32_t height = 480;
 
 	SDL_Window* pWindow = SDL_CreateWindow(
-		"RayTracer - **Insert Name**",
+		"RayTracer - **Van Nieuwenhuyse Ralf**",
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
 		width, height, 0);
@@ -45,7 +47,9 @@ int main(int argc, char* args[])
 	const auto pTimer = new Timer();
 	const auto pRenderer = new Renderer(pWindow);
 
-	const auto pScene = new Scene_W2();
+	const auto pScene = new Scene_W4_ReferenceScene();
+	//const auto pScene = new Scene_W4_BunnyScene();
+
 	pScene->Initialize();
 
 	//Start loop
@@ -67,7 +71,12 @@ int main(int argc, char* args[])
 			case SDL_KEYUP:
 				if(e.key.keysym.scancode == SDL_SCANCODE_X)
 					takeScreenshot = true;
+				if (e.key.keysym.scancode == SDL_SCANCODE_F2)
+					pRenderer->Toggelshadow();
+				if (e.key.keysym.scancode == SDL_SCANCODE_F3)
+					pRenderer->CycleLightingModes();
 				break;
+			
 			}
 		}
 

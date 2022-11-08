@@ -60,8 +60,8 @@ namespace dae
 		ColorRGB Shade(const HitRecord& hitRecord = {}, const Vector3& l = {}, const Vector3& v = {}) override
 		{
 			//todo: W3
-			assert(false && "Not Implemented Yet");
-			return {};
+			//assert(false && "Not Implemented Yet");
+			return {BRDF::Lambert(m_DiffuseReflectance,m_DiffuseColor)};
 		}
 
 	private:
@@ -85,8 +85,9 @@ namespace dae
 		ColorRGB Shade(const HitRecord& hitRecord = {}, const Vector3& l = {}, const Vector3& v = {}) override
 		{
 			//todo: W3
-			assert(false && "Not Implemented Yet");
-			return {};
+			//assert(false && "Not Implemented Yet");
+			return { BRDF::Lambert(m_DiffuseReflectance,m_DiffuseColor) + 
+				BRDF::Phong(m_SpecularReflectance,m_PhongExponent,l,-v,hitRecord.normal)};
 		}
 
 	private:
@@ -110,8 +111,44 @@ namespace dae
 		ColorRGB Shade(const HitRecord& hitRecord = {}, const Vector3& l = {}, const Vector3& v = {}) override
 		{
 			//todo: W3
-			assert(false && "Not Implemented Yet");
-			return {};
+			//assert(false && "Not Implemented Yet");
+			const Vector3 normal{ hitRecord.normal };
+
+			ColorRGB baseReflectivity{};
+			if (m_Metalness == 0.f)
+			{
+				baseReflectivity = ColorRGB{ 0.04f,0.04f,0.04f };
+			}
+			else
+			{
+				baseReflectivity = m_Albedo;
+			}
+
+			const Vector3 halfVec{ (l - v).Normalized() };
+
+			const float normalDistribution{ BRDF::NormalDistribution_GGX(normal, halfVec, m_Roughness) };
+			const ColorRGB fersnelFunc{ BRDF::FresnelFunction_Schlick(halfVec, -v, baseReflectivity) };
+			const float geometryFunc{ BRDF::GeometryFunction_Smith(normal, -v, l, m_Roughness) };
+
+
+			
+			ColorRGB DFG{ normalDistribution * fersnelFunc * geometryFunc };
+			const float denominator{ 4.f * (std::max(Vector3::Dot(-v, normal), 0.0f) * std::max(Vector3::Dot(l, normal), 0.0f) ) };
+			const ColorRGB specular{ DFG / denominator };
+
+			ColorRGB kd{};
+			if (m_Metalness == 0.f)
+			{
+				kd = ColorRGB{ 1.f,1.f,1.f };
+			}
+			else
+			{
+				kd = ColorRGB{ 0.f,0.f,0.f };
+			}
+
+			const ColorRGB diffuse{ BRDF::Lambert(kd, m_Albedo) };
+
+			return { specular + diffuse };
 		}
 
 	private:
