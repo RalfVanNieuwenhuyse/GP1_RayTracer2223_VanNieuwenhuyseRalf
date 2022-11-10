@@ -76,6 +76,9 @@ int main(int argc, char* args[])
 				if (e.key.keysym.scancode == SDL_SCANCODE_F3)
 					pRenderer->CycleLightingModes();
 				break;
+				if (e.key.keysym.scancode == SDL_SCANCODE_P)
+					pTimer->StartBenchmark();
+				break;
 			
 			}
 		}

@@ -35,9 +35,6 @@
     <ClInclude Include="Scene.h">
       <Filter>Misc</Filter>
     </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>Misc</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Misc</Filter>
     </ClInclude>
@@ -53,6 +50,7 @@
     <ClInclude Include="DataTypes.h">
       <Filter>Misc</Filter>
     </ClInclude>
+    <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -70,7 +68,7 @@
       <Filter>Misc</Filter>
     </ClCompile>
     <ClCompile Include="Timer.cpp">
-      <Filter>Misc</Filter>
+      <Filter>Math</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

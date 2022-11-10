@@ -156,11 +156,15 @@ void Renderer::RenderPixel(Scene* pScene, uint32_t pixelIndex, float fov, float 
 			}
 
 			const float observedArea{ Vector3::Dot(closestHit.normal, lightDirection) };
+			if (observedArea < 0)
+			{
+				continue;
+			}
 
 			switch (m_CurrentLightingMode)
 			{
 			case LightingMode::Combined:
-				if (observedArea > 0.f)
+				
 				{
 					finalColor += (LightUtils::GetRadiance(light, closestHit.origin) * materials[closestHit.materialIndex]->Shade(closestHit, lightDirection, rayDirection)) * observedArea;
 				}
@@ -174,7 +178,7 @@ void Renderer::RenderPixel(Scene* pScene, uint32_t pixelIndex, float fov, float 
 				break;
 
 			case LightingMode::ObservedArea:
-				if (observedArea > 0.f)
+				
 				{
 					finalColor += ColorRGB{ 1.f, 1.f, 1.f } *observedArea;
 				}

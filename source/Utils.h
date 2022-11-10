@@ -96,7 +96,7 @@ namespace dae
 #pragma endregion
 #pragma region Triangle HitTest
 		//TRIANGLE HIT-TESTS
-		inline bool HitTest_Triangle(const Triangle& triangle, const Ray& ray, HitRecord& hitRecord, bool ignoreHitRecord = false)
+		inline bool HitTest_Triangle(const Triangle& triangle, const Ray& ray, HitRecord& hitRecord, bool ignoreHitRecord = true)
 		{
 			//todo W5
 			const Vector3 v{ ray.direction };
@@ -228,26 +228,28 @@ namespace dae
 			}
 			
 			bool hit{ false };
-			for (size_t i{}; i < (mesh.indices.size() / 3); ++i)
+			HitRecord smallestTRecord;
+			smallestTRecord.t = FLT_MAX;
+			HitRecord currentRecord;			
+			Triangle tri;
+			for (size_t i{ 0 }; i < (mesh.indices.size() / 3); ++i)
 			{
-				Triangle triangle{};
-				triangle.normal = mesh.transformedNormals[i * 3];
-				triangle.materialIndex = mesh.materialIndex;
-				triangle.cullMode = mesh.cullMode;
+				const size_t index{ (i * 3) };
 
-				triangle.v0 = mesh.transformedPositions[mesh.indices[i]];
-				++i;
-				triangle.v1 = mesh.transformedPositions[mesh.indices[i]];
-				++i;
-				triangle.v2 = mesh.transformedPositions[mesh.indices[i]];
-
-
-
-				if (HitTest_Triangle(triangle, ray, hitRecord, ignoreHitRecord))
+				tri = { mesh.transformedPositions[mesh.indices[index]], mesh.transformedPositions[mesh.indices[index + 1]], mesh.transformedPositions[mesh.indices[index + 2]] };
+				tri.cullMode = mesh.cullMode;
+				tri.materialIndex = mesh.materialIndex;
+				tri.normal = mesh.transformedNormals[i];
+				if (HitTest_Triangle(tri, ray, currentRecord, ignoreHitRecord))
 				{
+					if (currentRecord.t < smallestTRecord.t)
+					{
+						smallestTRecord = currentRecord;
+					}
 					hit = true;
 				}
 			}
+			hitRecord = smallestTRecord;
 			return hit;
 		}
 
@@ -283,7 +285,7 @@ namespace dae
 			}
 
 			//return ColorRGB{ 0.f, 0.f, 0.f };
-			//return {};
+			return {};
 		}
 	}
 

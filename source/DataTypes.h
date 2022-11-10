@@ -151,8 +151,10 @@ namespace dae
 			//assert(false && "No Implemented Yet!");
 			//Calculate Final Transform 
 			//const auto finalTransform = ...
-			const Matrix finalTransformMatrix = translationTransform * rotationTransform * scaleTransform;
 
+			const Matrix finalTransformMatrix = scaleTransform *rotationTransform *translationTransform;
+			transformedPositions.clear();
+			transformedPositions.reserve(positions.size());
 			//Transform Positions (positions > transformedPositions)
 			//...			
 			for (size_t i{}; i < positions.size(); ++i)
@@ -160,7 +162,10 @@ namespace dae
 				transformedPositions.emplace_back(finalTransformMatrix.TransformPoint(positions[i]));
 			}
 			//Transform Normals (normals > transformedNormals)
-			//...			
+			//...	
+
+			transformedNormals.clear();
+			transformedNormals.reserve(positions.size());
 			for (size_t i{}; i < normals.size(); ++i)
 			{
 				transformedNormals.emplace_back(finalTransformMatrix.TransformVector(normals[i]));

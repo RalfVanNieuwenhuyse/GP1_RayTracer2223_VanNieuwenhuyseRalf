@@ -89,7 +89,7 @@ namespace dae
 			const float roughsqrt{ roughness * roughness };
 			const float k{ ((roughsqrt + 1.f) * (roughsqrt + 1.f)) / 8.0f };
 			const float Dotnv{ std::max(Vector3::Dot(n, v), 0.f) };
-			return { Dotnv / Dotnv *(1-k)+k};
+			return { Dotnv / (Dotnv *(1.f-k)+k)};
 		}
 
 		/**
