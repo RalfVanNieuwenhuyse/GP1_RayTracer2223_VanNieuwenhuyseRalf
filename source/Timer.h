@@ -8,8 +8,6 @@ namespace dae
 {
 	class Timer
 	{
-	private:
-		bool m_IsStopped = true;
 	public:
 		Timer();
 		virtual ~Timer() = default;
@@ -49,7 +47,7 @@ namespace dae
 		float m_ElapsedUpperBound = 0.03f;
 		float m_FPSTimer = 0.0f;
 
-		
+		bool m_IsStopped = true;
 		bool m_ForceElapsedUpperBound = false;
 
 		bool m_BenchmarkActive = false;
