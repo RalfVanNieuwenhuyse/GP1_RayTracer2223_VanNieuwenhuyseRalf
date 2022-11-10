@@ -228,8 +228,8 @@ namespace dae
 			}
 			
 			bool hit{ false };
-			HitRecord smallestTRecord;
-			smallestTRecord.t = FLT_MAX;
+			HitRecord smallestT;
+			smallestT.t = FLT_MAX;
 			HitRecord currentRecord;			
 			Triangle tri;
 			for (size_t i{ 0 }; i < (mesh.indices.size() / 3); ++i)
@@ -242,14 +242,14 @@ namespace dae
 				tri.normal = mesh.transformedNormals[i];
 				if (HitTest_Triangle(tri, ray, currentRecord, ignoreHitRecord))
 				{
-					if (currentRecord.t < smallestTRecord.t)
+					if (currentRecord.t < smallestT.t)
 					{
-						smallestTRecord = currentRecord;
+						smallestT = currentRecord;
 					}
 					hit = true;
 				}
 			}
-			hitRecord = smallestTRecord;
+			hitRecord = smallestT;
 			return hit;
 		}
 

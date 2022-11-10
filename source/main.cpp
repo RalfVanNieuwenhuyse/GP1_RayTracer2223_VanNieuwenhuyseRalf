@@ -74,17 +74,16 @@ int main(int argc, char* args[])
 				if (e.key.keysym.scancode == SDL_SCANCODE_F2)
 					pRenderer->Toggelshadow();
 				if (e.key.keysym.scancode == SDL_SCANCODE_F3)
-					pRenderer->CycleLightingModes();
-				break;
+					pRenderer->CycleLightingModes();				
 				if (e.key.keysym.scancode == SDL_SCANCODE_F6)
 					pTimer->StartBenchmark();
-				break;
-			
+				break;			
 			}
 		}
 
 		//--------- Update ---------
 		pScene->Update(pTimer);
+		
 
 		//--------- Render ---------
 		pRenderer->Render(pScene);
